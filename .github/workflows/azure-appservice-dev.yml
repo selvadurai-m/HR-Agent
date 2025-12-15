@@ -41,6 +41,9 @@ jobs:
           mkdir -p deploy/.next
           cp -R .next/static deploy/.next/static
 
+          # Add this line:
+          cp -R .next deploy/.next
+
           if [ -d "public" ]; then
             cp -R public deploy/public
           fi
