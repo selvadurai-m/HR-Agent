@@ -23,6 +23,12 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          NEXT_PUBLIC_USERS_TABLE_NAME: users
+          NEXT_PUBLIC_INTERVIEWS_TABLE_NAME: interviews
+          NEXT_PUBLIC_INTERVIEW_RESULTS_TABLE_NAME: interview_results
 
       - name: Package Next.js standalone
         shell: bash
