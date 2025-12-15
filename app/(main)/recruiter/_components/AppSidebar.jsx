@@ -39,7 +39,7 @@ export function AppSidebar() {
         <div className="relative group cursor-pointer">
           <div className="absolute -inset-2 bg-gradient-to-r from-violet-500/20 to-purple-500/20 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-all duration-500" />
           <Image
-            src="/Logo.png"
+            src="/logo.png"
             alt="Logo"
             width={110}
             height={110}
@@ -168,7 +168,6 @@ export function AppSidebar() {
                     {credits}
                   </span>
                 </div>
-               
               </div>
 
               <div className="flex items-center gap-2 pt-2 border-t border-white/20">

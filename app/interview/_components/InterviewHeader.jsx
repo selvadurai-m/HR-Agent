@@ -9,7 +9,7 @@ function InterviewHeader() {
           <div className="relative">
             <div className="absolute -inset-1 bg-gradient-to-r from-violet-500/20 to-purple-500/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             <Image
-              src="/Logo.png"
+              src="/logo.png"
               alt="Logo"
               width={120}
               height={40}
