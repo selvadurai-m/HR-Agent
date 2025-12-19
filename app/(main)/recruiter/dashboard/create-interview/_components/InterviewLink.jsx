@@ -18,7 +18,7 @@ import { useRouter } from 'next/navigation';
 import React from 'react';
 import { toast } from 'sonner';
 
-const InterviewLink = ({ interview_id, formData }) => {
+const InterviewLink = ({ interview_id, formData, resetForm }) => {
   const router = useRouter();
 
   // Get clean base URL (remove trailing slash if present)
@@ -35,7 +35,7 @@ const InterviewLink = ({ interview_id, formData }) => {
       new Date(
         formData?.created_at || '2025-04-14 19:09:50.492361+00'
       ).getTime() +
-        30 * 24 * 60 * 60 * 1000
+      30 * 24 * 60 * 60 * 1000
     );
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return futureDate.toLocaleDateString('en-US', options);
@@ -207,7 +207,7 @@ Best regards,
           <ArrowLeft className="size-4" /> Back to Dashboard
         </Button>
         <Button
-          onClick={() => router.push('/recruiter/dashboard/create-interview')}
+          onClick={resetForm}
           variant="gradient"
           size="lg"
           className="h-12"

@@ -22,21 +22,23 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        suppressHydrationWarning
       >
         <Provider>
           <AuthContextProvider>
             {children}
             <Toaster
-              position="top-right"
+              position="bottom-right"
               expand={false}
               richColors
               closeButton
               duration={4000}
               visibleToasts={4}
               gap={12}
+              offset="24px"
               toastOptions={{
                 style: {
                   background: 'white',
@@ -45,6 +47,8 @@ export default function RootLayout({ children }) {
                   padding: '14px 16px',
                   boxShadow: '0 10px 40px -10px rgba(0, 0, 0, 0.15)',
                   fontSize: '14px',
+                  maxWidth: 'auto',
+                  width: 'auto',
                 },
                 className: 'sonner-toast',
               }}

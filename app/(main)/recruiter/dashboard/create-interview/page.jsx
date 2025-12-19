@@ -46,7 +46,8 @@ function CreateInterview() {
     if (!formData.job_position) missingField = 'Job Position';
     else if (!formData.job_description) missingField = 'Job Description';
     else if (!formData.duration) missingField = 'Duration';
-    else if (!formData.type) missingField = 'Interview Type';
+    else if (!formData.type || formData.type.length === 0)
+      missingField = 'Interview Type';
 
     if (missingField) {
       toast.error(`${missingField} is required`);
@@ -78,6 +79,13 @@ function CreateInterview() {
     }
   };
 
+  const resetForm = () => {
+    setStep(1);
+    setFormData({});
+    setInterviewId(undefined);
+    setLoading(false);
+  };
+
   return (
     <div className="max-w-3xl mx-auto">
       {/* Header */}
@@ -105,39 +113,39 @@ function CreateInterview() {
 
       {/* Progress Steps */}
       <div className="mb-8">
-        <div className="flex items-center justify-between mb-3">
+        <div className="flex items-start justify-between mb-3">
           {[
             { num: 1, label: 'Details' },
             { num: 2, label: 'Questions' },
             { num: 3, label: 'Share' },
           ].map((s, i) => (
-            <div key={s.num} className="flex items-center flex-1">
+            <React.Fragment key={s.num}>
               <div className="flex flex-col items-center">
                 <div
-                  className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold transition-all ${
-                    step >= s.num
-                      ? 'bg-gradient-to-br from-violet-600 to-violet-600 text-white shadow-lg shadow-violet-500/30'
-                      : 'bg-gray-100 text-gray-400'
-                  }`}
+                  className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold transition-all ${step >= s.num
+                    ? 'bg-gradient-to-br from-violet-600 to-violet-600 text-white shadow-lg shadow-violet-500/30'
+                    : 'bg-gray-100 text-gray-400'
+                    }`}
                 >
                   {s.num}
                 </div>
                 <span
-                  className={`text-xs mt-2 font-medium ${step >= s.num ? 'text-violet-600' : 'text-gray-400'}`}
+                  className={`text-xs mt-2 font-medium whitespace-nowrap ${step >= s.num ? 'text-violet-600' : 'text-gray-400'}`}
                 >
                   {s.label}
                 </span>
               </div>
               {i < 2 && (
-                <div
-                  className={`flex-1 h-1 mx-3 rounded-full transition-all ${
-                    step > s.num
+                <div className="flex-1 flex items-center px-3 pt-5">
+                  <div
+                    className={`w-full h-1 rounded-full transition-all ${step > s.num
                       ? 'bg-gradient-to-r from-violet-600 to-violet-600'
                       : 'bg-gray-100'
-                  }`}
-                />
+                      }`}
+                  />
+                </div>
               )}
-            </div>
+            </React.Fragment>
           ))}
         </div>
       </div>
@@ -160,7 +168,7 @@ function CreateInterview() {
         )}
 
         {step === 3 && (
-          <InterviewLink interview_id={interviewId} formData={formData} />
+          <InterviewLink interview_id={interviewId} formData={formData} resetForm={resetForm} />
         )}
       </div>
     </div>

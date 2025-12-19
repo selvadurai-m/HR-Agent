@@ -39,7 +39,7 @@ function FormContainer({ onHandleInputChange, GoToNext }) {
     <div className="space-y-5">
       <div>
         <label className="text-sm font-medium text-gray-700">
-          Job Position
+          Job Position <span className="text-red-500">*</span>
         </label>
         <Input
           placeholder="e.g. Software Engineer"
@@ -52,7 +52,7 @@ function FormContainer({ onHandleInputChange, GoToNext }) {
 
       <div>
         <label className="text-sm font-medium text-gray-700">
-          Job Description
+          Job Description <span className="text-red-500">*</span>
         </label>
         <Textarea
           placeholder="Enter detailed job description"
@@ -65,7 +65,7 @@ function FormContainer({ onHandleInputChange, GoToNext }) {
 
       <div>
         <label className="text-sm font-medium text-gray-700">
-          Interview Duration
+          Interview Duration <span className="text-red-500">*</span>
         </label>
         <Select
           onValueChange={(value) => {
@@ -87,18 +87,17 @@ function FormContainer({ onHandleInputChange, GoToNext }) {
 
       <div>
         <label className="text-sm font-medium text-gray-700">
-          Interview Type
+          Interview Type <span className="text-red-500">*</span>
         </label>
         <div className="flex gap-2 flex-wrap mt-2">
           {InterviewType.map((type, index) => (
             <button
               key={index}
               type="button"
-              className={`flex items-center gap-2 px-3 py-2 rounded-xl border transition-all ${
-                interviewType.includes(type.name)
-                  ? 'bg-violet-100 border-violet-300 text-violet-700'
-                  : 'bg-white border-gray-200 text-gray-600 hover:border-violet-200 hover:bg-violet-50/50'
-              }`}
+              className={`flex items-center gap-2 px-3 py-2 rounded-xl border transition-all ${interviewType.includes(type.name)
+                ? 'bg-violet-100 border-violet-300 text-violet-700'
+                : 'bg-white border-gray-200 text-gray-600 hover:border-violet-200 hover:bg-violet-50/50'
+                }`}
               onClick={() => AddInterviewType(type.name)}
             >
               <type.icon className="h-4 w-4" />
