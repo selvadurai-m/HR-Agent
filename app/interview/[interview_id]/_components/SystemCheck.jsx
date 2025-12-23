@@ -48,8 +48,8 @@ export default function SystemCheck({ onAllChecksPassed, onSkip }) {
       navigator.mediaDevices &&
       typeof navigator.mediaDevices.getUserMedia === 'function';
 
-    const isSecure = 
-      typeof window !== 'undefined' && 
+    const isSecure =
+      typeof window !== 'undefined' &&
       (window.location.protocol === 'https:' || window.location.hostname === 'localhost');
 
     if (!isSecure) {
@@ -238,9 +238,9 @@ export default function SystemCheck({ onAllChecksPassed, onSkip }) {
     // Set initial audio level status
     setChecks((prev) => ({
       ...prev,
-      audioLevel: { 
-        status: 'checking', 
-        message: 'Speak to test your microphone...' 
+      audioLevel: {
+        status: 'checking',
+        message: 'Speak to test your microphone...'
       },
     }));
   }, [checkBrowser, checkCamera, checkMicrophone]);
@@ -285,12 +285,12 @@ export default function SystemCheck({ onAllChecksPassed, onSkip }) {
   /**
    * Check if all tests passed
    */
-  const allPassed = 
+  const allPassed =
     checks.browser.status === 'passed' &&
     checks.camera.status === 'passed' &&
     checks.microphone.status === 'passed';
 
-  const hasFailures = 
+  const hasFailures =
     checks.browser.status === 'failed' ||
     checks.camera.status === 'failed' ||
     checks.microphone.status === 'failed';
@@ -314,49 +314,49 @@ export default function SystemCheck({ onAllChecksPassed, onSkip }) {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl border border-violet-100 overflow-hidden">
+    <div className="bg-white rounded-2xl shadow-2xl border border-violet-100 overflow-hidden w-full">
       {/* Header */}
-      <div className="bg-gradient-to-r from-violet-600 to-violet-600 p-6 text-white">
-        <h2 className="text-xl font-bold flex items-center gap-2">
-          <Monitor className="w-6 h-6" />
+      <div className="bg-gradient-to-r from-violet-600 to-violet-600 px-4 py-2 text-white">
+        <h2 className="text-base font-bold flex items-center gap-2">
+          <Monitor className="w-4 h-4" />
           System Check
         </h2>
-        <p className="text-violet-100 text-sm mt-1">
+        <p className="text-violet-100 text-[11px] mt-0.5">
           Let&apos;s make sure everything is working before your interview
         </p>
       </div>
 
-      <div className="p-6">
+      <div className="p-2.5 space-y-2">
         {/* Camera Preview */}
-        <div className="mb-6">
-          <div className="relative aspect-video bg-gray-900 rounded-xl overflow-hidden mb-4">
+        <div>
+          <div className="relative aspect-[4/3] bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg overflow-hidden shadow-md">
             <video
               ref={videoRef}
               autoPlay
               playsInline
               muted
-              className={`w-full h-full object-cover ${!cameraPreview ? 'hidden' : ''}`}
+              className={`w-full h-full object-cover scale-x-[-1] ${!cameraPreview ? 'hidden' : ''}`}
             />
             {!cameraPreview && (
               <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
-                <CameraOff className="w-12 h-12 mb-2" />
-                <p className="text-sm">Camera preview unavailable</p>
+                <CameraOff className="w-8 h-8 mb-1 opacity-50" />
+                <p className="text-[11px] font-medium">Camera unavailable</p>
               </div>
             )}
 
             {/* Audio level indicator */}
             {isTestingAudio && (
-              <div className="absolute bottom-3 left-3 right-3">
-                <div className="flex items-center gap-2 bg-black/50 backdrop-blur-sm rounded-lg px-3 py-2">
-                  <Volume2 className="w-4 h-4 text-white" />
-                  <div className="flex-1 h-2 bg-gray-700 rounded-full overflow-hidden">
+              <div className="absolute bottom-2 left-2 right-2">
+                <div className="flex items-center gap-2 bg-black/60 backdrop-blur-md rounded-md px-2 py-1.5 shadow-lg">
+                  <Volume2 className="w-3 h-3 text-white flex-shrink-0" />
+                  <div className="flex-1 h-1.5 bg-gray-700 rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-gradient-to-r from-emerald-400 to-cyan-400 transition-all duration-100"
+                      className="h-full bg-gradient-to-r from-emerald-400 to-cyan-400 transition-all duration-300 ease-in-out"
                       style={{ width: `${micLevel * 100}%` }}
                     />
                   </div>
-                  <span className="text-white text-xs">
-                    {micLevel > 0.1 ? 'Detected' : 'Speak now'}
+                  <span className="text-white text-[10px] font-medium min-w-[45px] text-right">
+                    {micLevel > 0.1 ? 'Detected' : 'Speak'}
                   </span>
                 </div>
               </div>
@@ -365,116 +365,114 @@ export default function SystemCheck({ onAllChecksPassed, onSkip }) {
         </div>
 
         {/* Check Items */}
-        <div className="space-y-3 mb-6">
-          {/* Browser Check */}
-          <div className={`flex items-center justify-between p-4 rounded-xl border transition-all ${
-            checks.browser.status === 'passed' 
-              ? 'bg-emerald-50 border-emerald-200' 
+        <div>
+          <div className="space-y-1">
+            {/* Browser Check */}
+            <div className={`flex items-center justify-between p-2 rounded-lg border-2 transition-all ${checks.browser.status === 'passed'
+              ? 'bg-emerald-50 border-emerald-200'
               : checks.browser.status === 'failed'
                 ? 'bg-red-50 border-red-200'
                 : 'bg-gray-50 border-gray-200'
-          }`}>
-            <div className="flex items-center gap-3">
-              <Wifi className="w-5 h-5 text-gray-600" />
-              <div>
-                <p className="font-medium text-gray-800">Browser Compatibility</p>
-                <p className="text-sm text-gray-500">{checks.browser.message}</p>
+              }`}>
+              <div className="flex items-center gap-2 flex-1 min-w-0">
+                <Wifi className="w-3.5 h-3.5 text-gray-600 flex-shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-gray-900 text-[11px]">Browser Compatibility</p>
+                  <p className="text-[10px] text-gray-600 truncate">{checks.browser.message}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-1.5 ml-2">
+                <StatusIcon status={checks.browser.status} />
+                {checks.browser.status === 'failed' && (
+                  <Button size="sm" variant="ghost" onClick={() => retryCheck('browser')} className="h-6 w-6 p-0">
+                    <RefreshCw className="w-3 h-3" />
+                  </Button>
+                )}
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <StatusIcon status={checks.browser.status} />
-              {checks.browser.status === 'failed' && (
-                <Button size="sm" variant="ghost" onClick={() => retryCheck('browser')}>
-                  <RefreshCw className="w-4 h-4" />
-                </Button>
-              )}
-            </div>
-          </div>
 
-          {/* Camera Check */}
-          <div className={`flex items-center justify-between p-4 rounded-xl border transition-all ${
-            checks.camera.status === 'passed' 
-              ? 'bg-emerald-50 border-emerald-200' 
+            {/* Camera Check */}
+            <div className={`flex items-center justify-between p-2 rounded-lg border-2 transition-all ${checks.camera.status === 'passed'
+              ? 'bg-emerald-50 border-emerald-200'
               : checks.camera.status === 'failed'
                 ? 'bg-red-50 border-red-200'
                 : 'bg-gray-50 border-gray-200'
-          }`}>
-            <div className="flex items-center gap-3">
-              <Camera className="w-5 h-5 text-gray-600" />
-              <div>
-                <p className="font-medium text-gray-800">Camera Access</p>
-                <p className="text-sm text-gray-500">{checks.camera.message}</p>
+              }`}>
+              <div className="flex items-center gap-2 flex-1 min-w-0">
+                <Camera className="w-3.5 h-3.5 text-gray-600 flex-shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-gray-900 text-[11px]">Camera Access</p>
+                  <p className="text-[10px] text-gray-600 truncate">{checks.camera.message}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-1.5 ml-2">
+                <StatusIcon status={checks.camera.status} />
+                {checks.camera.status === 'failed' && (
+                  <Button size="sm" variant="ghost" onClick={() => retryCheck('camera')} className="h-6 w-6 p-0">
+                    <RefreshCw className="w-3 h-3" />
+                  </Button>
+                )}
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <StatusIcon status={checks.camera.status} />
-              {checks.camera.status === 'failed' && (
-                <Button size="sm" variant="ghost" onClick={() => retryCheck('camera')}>
-                  <RefreshCw className="w-4 h-4" />
-                </Button>
-              )}
-            </div>
-          </div>
 
-          {/* Microphone Check */}
-          <div className={`flex items-center justify-between p-4 rounded-xl border transition-all ${
-            checks.microphone.status === 'passed' 
-              ? 'bg-emerald-50 border-emerald-200' 
+            {/* Microphone Check */}
+            <div className={`flex items-center justify-between p-2 rounded-lg border-2 transition-all ${checks.microphone.status === 'passed'
+              ? 'bg-emerald-50 border-emerald-200'
               : checks.microphone.status === 'failed'
                 ? 'bg-red-50 border-red-200'
                 : 'bg-gray-50 border-gray-200'
-          }`}>
-            <div className="flex items-center gap-3">
-              <Mic className="w-5 h-5 text-gray-600" />
-              <div>
-                <p className="font-medium text-gray-800">Microphone Access</p>
-                <p className="text-sm text-gray-500">{checks.microphone.message}</p>
+              }`}>
+              <div className="flex items-center gap-2 flex-1 min-w-0">
+                <Mic className="w-3.5 h-3.5 text-gray-600 flex-shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-gray-900 text-[11px]">Microphone Access</p>
+                  <p className="text-[10px] text-gray-600 truncate">{checks.microphone.message}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-1.5 ml-2">
+                <StatusIcon status={checks.microphone.status} />
+                {checks.microphone.status === 'failed' && (
+                  <Button size="sm" variant="ghost" onClick={() => retryCheck('microphone')} className="h-6 w-6 p-0">
+                    <RefreshCw className="w-3 h-3" />
+                  </Button>
+                )}
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <StatusIcon status={checks.microphone.status} />
-              {checks.microphone.status === 'failed' && (
-                <Button size="sm" variant="ghost" onClick={() => retryCheck('microphone')}>
-                  <RefreshCw className="w-4 h-4" />
-                </Button>
-              )}
-            </div>
-          </div>
 
-          {/* Audio Level Check */}
-          <div className={`flex items-center justify-between p-4 rounded-xl border transition-all ${
-            checks.audioLevel.status === 'passed' 
-              ? 'bg-emerald-50 border-emerald-200' 
+            {/* Audio Level Check */}
+            <div className={`flex items-center justify-between p-2 rounded-lg border-2 transition-all ${checks.audioLevel.status === 'passed'
+              ? 'bg-emerald-50 border-emerald-200'
               : checks.audioLevel.status === 'failed'
                 ? 'bg-red-50 border-red-200'
                 : 'bg-gray-50 border-gray-200'
-          }`}>
-            <div className="flex items-center gap-3">
-              <Volume2 className="w-5 h-5 text-gray-600" />
-              <div>
-                <p className="font-medium text-gray-800">Audio Input Test</p>
-                <p className="text-sm text-gray-500">{checks.audioLevel.message}</p>
+              }`}>
+              <div className="flex items-center gap-2 flex-1 min-w-0">
+                <Volume2 className="w-3.5 h-3.5 text-gray-600 flex-shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-gray-900 text-[11px]">Audio Input Test</p>
+                  <p className="text-[10px] text-gray-600 truncate">{checks.audioLevel.message}</p>
+                </div>
               </div>
+              <StatusIcon status={checks.audioLevel.status} />
             </div>
-            <StatusIcon status={checks.audioLevel.status} />
           </div>
         </div>
 
         {/* Warning message if there are failures */}
         {hasFailures && (
-          <div className="flex items-start gap-3 p-4 bg-amber-50 border border-amber-200 rounded-xl mb-6">
-            <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
-            <div>
-              <p className="font-medium text-amber-800">Some checks failed</p>
-              <p className="text-sm text-amber-700">
-                Please resolve the issues above or proceed with limited functionality.
+          <div className="flex items-start gap-2 p-2 bg-amber-50 border-2 border-amber-200 rounded-lg">
+            <AlertTriangle className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" />
+            <div className="flex-1 min-w-0">
+              <p className="font-semibold text-amber-900 text-[11px]">Some checks failed</p>
+              <p className="text-[10px] text-amber-700 mt-0.5">
+                Please resolve the issues or proceed with limited functionality.
               </p>
             </div>
           </div>
         )}
 
         {/* Action Buttons */}
-        <div className="flex gap-3">
+        <div className="flex gap-2">
           <Button
             onClick={() => {
               // Stop streams before proceeding
@@ -484,12 +482,12 @@ export default function SystemCheck({ onAllChecksPassed, onSkip }) {
               onAllChecksPassed?.();
             }}
             disabled={!allPassed && hasFailures}
-            className="flex-1 bg-gradient-to-r from-violet-600 to-violet-600 hover:from-violet-700 hover:to-violet-700 text-white h-12"
+            className="flex-1 bg-gradient-to-r from-violet-600 to-violet-600 hover:from-violet-700 hover:to-violet-700 text-white h-9 text-xs font-semibold shadow-lg shadow-violet-500/25 hover:shadow-xl"
           >
-            <CheckCircle2 className="w-5 h-5 mr-2" />
+            <CheckCircle2 className="w-3.5 h-3.5 mr-1.5" />
             {allPassed ? 'All Checks Passed - Continue' : 'Continue to Interview'}
           </Button>
-          
+
           {hasFailures && (
             <Button
               variant="outline"
@@ -499,9 +497,9 @@ export default function SystemCheck({ onAllChecksPassed, onSkip }) {
                 }
                 onSkip?.();
               }}
-              className="border-gray-300 text-gray-600 hover:bg-gray-50"
+              className="border-2 border-gray-300 text-gray-700 hover:bg-gray-100 h-9 px-4 font-medium text-xs"
             >
-              Skip Checks
+              Skip
             </Button>
           )}
         </div>

@@ -36,6 +36,7 @@ function Interview() {
   const { interviewInfo, setInterviewInfo } = useContext(InterviewDataContext);
   const router = useRouter();
   const [accessDenied, setAccessDenied] = useState(false);
+  const [authChecking, setAuthChecking] = useState(true);
   const { user } = useUser();
   const [showSystemCheck, setShowSystemCheck] = useState(false);
   const [systemCheckPassed, setSystemCheckPassed] = useState(false);
@@ -99,16 +100,20 @@ function Interview() {
 
   useEffect(() => {
     const checkAccess = async () => {
+      setAuthChecking(true);
       // 1. Get current session
       const {
         data: { session },
       } = await supabase.auth.getSession();
       if (!session?.user) {
-        router.push('/login');
+        // Redirect to login with return URL so user comes back after login
+        const returnUrl = encodeURIComponent(`/interview/${interview_id}`);
+        router.push(`/login?returnUrl=${returnUrl}`);
         return;
       }
       // No email comparison, just require a session
       setAccessDenied(false);
+      setAuthChecking(false);
     };
     checkAccess();
   }, [router, interview_id]);
@@ -137,7 +142,6 @@ function Interview() {
   };
 
   const handleStartSystemCheck = () => {
-    if (!validateJoin()) return;
     setShowSystemCheck(true);
   };
 
@@ -153,8 +157,6 @@ function Interview() {
   };
 
   const onJoinInterview = async () => {
-    if (!validateJoin()) return; // Deny entry if validation fails
-
     try {
       const newInterviewInfo = {
         ...interviewInfo,
@@ -180,6 +182,24 @@ function Interview() {
       toast.error('Connection failed');
     }
   };
+
+  // Show loading screen while checking authentication
+  if (authChecking) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-gradient-to-br from-slate-50 via-white to-violet-50/30">
+        <div className="text-center p-10 bg-white/80 backdrop-blur-md rounded-2xl shadow-xl border border-violet-100/50 animate-fade-in">
+          <div className="relative mx-auto mb-6">
+            <div className="absolute -inset-2 bg-gradient-to-r from-violet-500 to-purple-500 rounded-full blur opacity-30 animate-pulse" />
+            <div className="relative animate-spin rounded-full h-14 w-14 border-4 border-violet-200 border-t-violet-600 mx-auto"></div>
+          </div>
+          <p className="text-gray-600 font-medium">
+            Verifying access...
+          </p>
+          <p className="text-gray-400 text-sm mt-2">Please wait</p>
+        </div>
+      </div>
+    );
+  }
 
   if (accessDenied) {
     return (
@@ -451,13 +471,13 @@ function Interview() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-start justify-center z-50 overflow-y-auto"
           >
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
+              initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="w-full max-w-lg"
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="w-full max-w-lg my-4 px-4"
             >
               <SystemCheck
                 onAllChecksPassed={handleSystemCheckComplete}

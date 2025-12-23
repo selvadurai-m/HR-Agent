@@ -213,10 +213,10 @@ Key Guidelines:
 
     return () => {
       vapi.off('message', handleMessage);
-      vapi.off('call-start', () => {});
+      vapi.off('call-start', () => { });
       vapi.off('speech-start', handleSpeechStart);
       vapi.off('speech-end', handleSpeechEnd);
-      vapi.off('call-end', () => {});
+      vapi.off('call-end', () => { });
     };
   }, [vapi]);
 
@@ -322,13 +322,36 @@ Key Guidelines:
       }
 
       toast.success('Feedback generated successfully!');
+
+      // Stop all media streams before leaving
+      try {
+        // Find and stop all active media streams
+        const videoElements = document.querySelectorAll('video');
+        videoElements.forEach(video => {
+          if (video.srcObject) {
+            const stream = video.srcObject;
+            stream.getTracks().forEach(track => {
+              track.stop();
+              logger.log('Stopped media track:', track.kind);
+            });
+            video.srcObject = null;
+          }
+        });
+      } catch (e) {
+        logger.error('Error stopping media streams:', e);
+      }
+
       // Clear localStorage to avoid stale data
       if (typeof window !== 'undefined') {
         localStorage.removeItem('interviewInfo');
+
+        // Force full page reload to completely destroy all media streams
+        // Using window.location.href instead of router.replace ensures
+        // React components are fully unmounted and streams are released
+        setTimeout(() => {
+          window.location.href = '/interview/' + interviewInfo?.interview_id + '/completed';
+        }, 100);
       }
-      router.replace(
-        '/interview/' + interviewInfo?.interview_id + '/completed'
-      );
     } catch (error) {
       logger.error('Feedback generation failed:', error);
       toast.error('Failed to generate feedback');

@@ -105,10 +105,21 @@ export default function AuthCallback() {
       localStorage.removeItem('pending_role');
 
       setLoading(false);
-      if (finalRole === 'recruiter') {
-        router.push('/recruiter/dashboard');
+
+      // Check for returnUrl in query params
+      const urlParams = new URLSearchParams(window.location.search);
+      const returnUrl = urlParams.get('returnUrl');
+
+      if (returnUrl) {
+        // Redirect to the return URL
+        router.push(decodeURIComponent(returnUrl));
       } else {
-        router.push('/candidate/dashboard');
+        // Default redirect based on role
+        if (finalRole === 'recruiter') {
+          router.push('/recruiter/dashboard');
+        } else {
+          router.push('/candidate/dashboard');
+        }
       }
     };
 

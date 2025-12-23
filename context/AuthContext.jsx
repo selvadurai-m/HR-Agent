@@ -78,10 +78,22 @@ export const AuthContextProvider = ({ children }) => {
 
       toast.success('Logged in!');
 
-      if (userData.role === 'recruiter') {
-        window.location.href = '/recruiter/dashboard';
-      } else if (userData.role === 'candidate') {
-        window.location.href = '/candidate/dashboard';
+      // Check for returnUrl in query params
+      if (typeof window !== 'undefined') {
+        const urlParams = new URLSearchParams(window.location.search);
+        const returnUrl = urlParams.get('returnUrl');
+
+        if (returnUrl) {
+          // Redirect to the return URL
+          window.location.href = decodeURIComponent(returnUrl);
+        } else {
+          // Default redirect based on role
+          if (userData.role === 'recruiter') {
+            window.location.href = '/recruiter/dashboard';
+          } else if (userData.role === 'candidate') {
+            window.location.href = '/candidate/dashboard';
+          }
+        }
       }
 
       return { success: true, data };

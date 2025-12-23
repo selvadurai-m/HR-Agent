@@ -57,7 +57,16 @@ export function LoginForm(props) {
 
   // with google
   const handleGoogleSignIn = async () => {
-    const { error } = await signInWithGoogle();
+    // Check if there's a returnUrl in the current URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const returnUrl = urlParams.get('returnUrl');
+
+    // Pass returnUrl to auth callback if it exists
+    const callbackPath = returnUrl
+      ? `/auth/callback?returnUrl=${encodeURIComponent(returnUrl)}`
+      : '/auth/callback';
+
+    const { error } = await signInWithGoogle(callbackPath);
 
     if (error) {
       toast.error('Google login failed: ' + error.message);

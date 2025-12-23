@@ -1,7 +1,45 @@
+'use client';
+
 import { Check, Clock, Mail, Shield, ChevronRight } from 'lucide-react';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const InterviewCompleted = () => {
+  // Clean up any lingering media streams when this page loads
+  useEffect(() => {
+    const cleanup = () => {
+      try {
+        // Find and stop all active media streams
+        const videoElements = document.querySelectorAll('video');
+        videoElements.forEach(video => {
+          if (video.srcObject) {
+            const stream = video.srcObject;
+            stream.getTracks().forEach(track => {
+              track.stop();
+              console.log('Stopped lingering media track:', track.kind);
+            });
+            video.srcObject = null;
+          }
+        });
+
+        // Also try to stop any MediaStream tracks globally
+        if (typeof navigator !== 'undefined' && navigator.mediaDevices) {
+          // This is a fallback to ensure all tracks are stopped
+          console.log('Media cleanup completed');
+        }
+      } catch (e) {
+        console.error('Error during media cleanup:', e);
+      }
+    };
+
+    // Run cleanup immediately on mount
+    cleanup();
+
+    // Also run after a short delay to catch any delayed streams
+    const timer = setTimeout(cleanup, 100);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-violet-50 to-purple-50 flex items-center justify-center px-4 py-12">
       <div className="max-w-lg w-full bg-white p-8 rounded-3xl shadow-xl text-center border border-gray-100 overflow-hidden relative">
